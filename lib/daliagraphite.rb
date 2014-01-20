@@ -15,16 +15,15 @@ module Dalia::MiniGraphite
 	end
 
 	def self.datapoint(key, value, timestamp = Time.now)
-		socket = TCPSocket.new(@@graphite_host, @@graphite_port)
 		signal = "#{key} #{value} #{timestamp.to_i}\n"
-		p signal
+		socket = TCPSocket.new(@@graphite_host, @@graphite_port)
 		socket.print(signal)
 		socket.close
 	end
 
 	def self.counter(key, value = 1)
-		socket = UDPSocket.new
 		signal = "#{key}:#{value}|c"
+		socket = UDPSocket.new
 		socket.send(signal, 0, @@statsd_host, @@statsd_port)
 	end
 
