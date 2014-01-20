@@ -1,5 +1,5 @@
 require "daliagraphite/version"
+require "daliagraphite/blacbox"
 
 module Daliagraphite
-  # Your code goes here...
 end
