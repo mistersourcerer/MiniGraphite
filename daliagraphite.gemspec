@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "daliagraphite"
   spec.version       = Daliagraphite::VERSION
   spec.authors       = ["Sevastianos Komianos"]
-  spec.email         = ["sebkomianos@nerdvana.gr"]
+  spec.email         = ["sebastian.komianos@daliaresearch.com"]
   spec.summary       = %q{TODO: Write a short summary. Required.}
   spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = ""
