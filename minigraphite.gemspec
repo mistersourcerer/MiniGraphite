@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'daliagraphite/version'
+require 'minigraphite/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "daliagraphite"
-  spec.version       = Daliagraphite::VERSION
+  spec.name          = "MiniGraphite"
+  spec.version       = MiniGraphite::VERSION
   spec.authors       = ["Sevastianos Komianos"]
   spec.email         = ["sebastian.komianos@daliaresearch.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
+  spec.summary       = "Simple wrapper for Graphite and Statsd"
   spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/DaliaResearch/MiniGraphite"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

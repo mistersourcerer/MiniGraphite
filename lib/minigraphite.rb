@@ -1,4 +1,4 @@
-require_relative "daliagraphite/version"
+require_relative "minigraphite/version"
 
 require "socket"
 
