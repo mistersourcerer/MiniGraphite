@@ -19,8 +19,8 @@ module Dalia
 		    end
 		  end
 
-		  def log_signal(message)
-		    debug "SIGNAL SENT: #{message}"
+		  def log(message)
+		    debug "#{message}"
 		  end
 
 		end

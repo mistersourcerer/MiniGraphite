@@ -22,14 +22,14 @@ module Dalia::MiniGraphite
 		socket = TCPSocket.new(@@graphite_host, @@graphite_port)
 		socket.print(signal)
 		socket.close
-		@@log.log_signal(signal)
+		@@log.log("DATAPOINT SIGNAL SENT: " + signal)
 	end
 
 	def self.counter(key, value = 1)
 		signal = "#{key}:#{value}|c"
 		socket = UDPSocket.new
 		socket.send(signal, 0, @@statsd_host, @@statsd_port)
-		@@log.log_signal(signal)
+		@@log.log("COUNTER SIGNAL SENT: " + signal)
 	end
 
 end
