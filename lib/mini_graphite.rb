@@ -1,37 +1,59 @@
 require_relative "mini_graphite/version"
-require_relative "mini_graphite/log"
+require_relative "mini_graphite/logger"
 
 require "socket"
 
 module Dalia
 	module MiniGraphite
+		DEFAULTS = {
+			:graphite_host => "graphite.host.com",
+			:graphite_port => 2003,
+			:statsd_host => "statsd.host.com",
+			:statsd_port => 8125,
+			:mock_mode => false,
+			:debug_mode => false
+		}
 
-		def self.config(options = {})
-			@@mock_mode = options[:mock_mode] || false
-			debug_mode = options[:debug_mode].nil? ? true : options[:debug]
-			@@graphite_host = options[:graphite_host]
-			@@graphite_port = options[:graphite_port]
-			@@statsd_host = options[:statsd_host]
-			@@statsd_port = options[:statsd_port]
-			@@log = Dalia::MiniGraphite::Log.new(debug_mode)
-			@@log.debug("INITIALIZED")
+		def self.config(opts = {})
+			@opts = DEFAULTS.merge(opts)
+			@logger = Dalia::MiniGraphite::Logger.new(opts[:debug_mode])
+			logger.debug("Initalized with opts")
+			logger.debug(opts.inspect)
 		end
 
-		def self.datapoint(key, value, timestamp = Time.now)
-			return if @@mock_mode
-			signal = "#{key} #{value} #{timestamp.to_i}\n"
-			socket = TCPSocket.new(@@graphite_host, @@graphite_port)
-			socket.print(signal)
-			socket.close
-			@@log.debug("DATAPOINT SIGNAL SENT: " + signal)
+		def self.datapoint(key, value = 1, timestamp = Time.now)
+			signal = "#{key} #{value} #{timestamp.to_i}"
+			logger.debug("Sending datapoint: '#{signal}'")
+
+			send_tcp(signal) if !opts[:mock_mode]
 		end
 
 		def self.counter(key, value = 1)
-			return if @@mock_mode
 			signal = "#{key}:#{value}|c"
+			logger.debug("Sending counter: '#{signal}'")
+
+			send_udp(signal) if !opts[:mock_mode]
+		end
+
+	private
+
+		def self.opts
+			@opts
+		end
+
+		def self.logger
+			@logger
+		end
+
+		def self.send_tcp(message)
+			socket = TCPSocket.new(opts[:graphite_host], opts[:graphite_port])
+			socket.print("#{message}\n")
+			socket.close
+		end
+
+		def self.send_udp(message)
 			socket = UDPSocket.new
-			socket.send(signal, 0, @@statsd_host, @@statsd_port)
-			@@log.debug("COUNTER SIGNAL SENT: " + signal)
+			socket.send(message, 0, opts[:statsd_host], opts[:statsd_port])
 		end
 
 	end
