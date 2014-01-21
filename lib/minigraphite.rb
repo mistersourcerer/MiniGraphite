@@ -1,4 +1,5 @@
 require_relative "minigraphite/version"
+require_relative "minigraphite/log"
 
 require "socket"
 
@@ -12,6 +13,8 @@ module Dalia::MiniGraphite
 		@@graphite_port = options[:graphite_port]
 		@@statsd_host = options[:statsd_host]
 		@@statsd_port = options[:statsd_port]
+		@@log = Dalia::MiniGraphite::Log.new
+		@@log.debug("INITIALIZED")
 	end
 
 	def self.datapoint(key, value, timestamp = Time.now)
@@ -19,12 +22,14 @@ module Dalia::MiniGraphite
 		socket = TCPSocket.new(@@graphite_host, @@graphite_port)
 		socket.print(signal)
 		socket.close
+		@@log.log_signal(signal)
 	end
 
 	def self.counter(key, value = 1)
 		signal = "#{key}:#{value}|c"
 		socket = UDPSocket.new
 		socket.send(signal, 0, @@statsd_host, @@statsd_port)
+		@@log.log_signal(signal)
 	end
 
 end
