@@ -1,3 +1,3 @@
-module DaliaGraphite
-  VERSION = "0.5"
+module MiniGraphite
+  VERSION = "0.7"
 end
