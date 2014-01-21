@@ -1,8 +1,7 @@
-require "minitest/unit"
 require "minitest/autorun"
 require "mocha/setup"
-require_relative "../lib/minigraphite"
-require_relative "../lib/minigraphite/log"
+require_relative "../lib/mini_graphite"
+require_relative "../lib/mini_graphite/log"
 
 class MiniGraphiteTest < MiniTest::Unit::TestCase
 
@@ -18,7 +17,7 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
 
 		Dalia::MiniGraphite::Log.any_instance.expects(:debug).with("DATAPOINT SIGNAL SENT: test.age 31 1357117860\n")
 
-		Dalia::MiniGraphite.datapoint("test.age", 31, Time.parse("2013-01-02 10:11"))
+		Dalia::MiniGraphite.datapoint("test.age", 31, Time.new(2013,1,2,10,11))
 	end
 
 	def test_counter
