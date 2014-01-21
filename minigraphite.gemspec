@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'mini_graphite/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "MiniGraphite"
+  spec.name          = "mini_graphite"
   spec.version       = Dalia::MiniGraphite::VERSION
   spec.authors       = ["Sevastianos Komianos"]
   spec.email         = ["sebastian.komianos@daliaresearch.com"]
