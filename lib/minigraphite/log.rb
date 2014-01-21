@@ -1,9 +1,11 @@
 module Dalia
+
 	module MiniGraphite
+
 		class Log
 			attr_reader :debug_mode
 
-		  def initialize(debug_mode = true)
+		  def initialize(debug_mode)
 		    @debug_mode = debug_mode
 		  end
 
@@ -19,10 +21,8 @@ module Dalia
 		    end
 		  end
 
-		  def log(message)
-		    debug "#{message}"
-		  end
-
 		end
+
 	end
+	
 end

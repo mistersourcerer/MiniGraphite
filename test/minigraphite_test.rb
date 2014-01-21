@@ -16,7 +16,7 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
 		socket_mock.expects(:print).with("test.age 31 1357117860\n")
 		socket_mock.expects(:close)
 
-		Dalia::MiniGraphite::Log.any_instance.expects(:log).with("DATAPOINT SIGNAL SENT: test.age 31 1357117860\n")
+		Dalia::MiniGraphite::Log.any_instance.expects(:debug).with("DATAPOINT SIGNAL SENT: test.age 31 1357117860\n")
 
 		Dalia::MiniGraphite.datapoint("test.age", 31, Time.parse("2013-01-02 10:11"))
 	end
@@ -30,7 +30,7 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
 		UDPSocket.expects(:new).returns(socket_mock)
 		socket_mock.expects(:send).with("height:231|c", 0, "graphite.it.daliaresearch.com", 8125 )
 
-		Dalia::MiniGraphite::Log.any_instance.expects(:log).with("COUNTER SIGNAL SENT: height:231|c")
+		Dalia::MiniGraphite::Log.any_instance.expects(:debug).with("COUNTER SIGNAL SENT: height:231|c")
 
 		Dalia::MiniGraphite.counter("height", 231)
 	end
