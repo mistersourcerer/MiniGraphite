@@ -20,7 +20,7 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
 
 		socket_mock = mock()
 		UDPSocket.expects(:new).returns(socket_mock)
-		socket_mock.expects(:send).with("height:231|c", 0, "graphite.host.com", 8125 )
+		socket_mock.expects(:send).with("height:231|c", 0, "statsd.host.com", 8125 )
 
 		Dalia::MiniGraphite.counter("height", 231)
 	end
