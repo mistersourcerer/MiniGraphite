@@ -5,10 +5,10 @@ require_relative "../lib/mini_graphite"
 class MiniGraphiteTest < MiniTest::Unit::TestCase
 
 	def test_datapoint
-		Dalia::MiniGraphite.config({ :graphite_host => "graphite.it.daliaresearch.com", :graphite_port => 2003 })
+		Dalia::MiniGraphite.config({ :graphite_host => "graphite.host.com", :graphite_port => 2003 })
 
 		socket_mock = mock()
-		TCPSocket.expects(:new).with("graphite.it.daliaresearch.com", 2003).returns(socket_mock)
+		TCPSocket.expects(:new).with("graphite.host.com", 2003).returns(socket_mock)
 		socket_mock.expects(:print).with("test.age 31 1357117860\n")
 		socket_mock.expects(:close)
 
@@ -16,11 +16,11 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
 	end
 
 	def test_counter
-		Dalia::MiniGraphite.config({ :statsd_host => "graphite.it.daliaresearch.com", :statsd_port => 8125 })
+		Dalia::MiniGraphite.config({ :statsd_host => "statsd.host.com", :statsd_port => 8125 })
 
 		socket_mock = mock()
 		UDPSocket.expects(:new).returns(socket_mock)
-		socket_mock.expects(:send).with("height:231|c", 0, "graphite.it.daliaresearch.com", 8125 )
+		socket_mock.expects(:send).with("height:231|c", 0, "graphite.host.com", 8125 )
 
 		Dalia::MiniGraphite.counter("height", 231)
 	end
