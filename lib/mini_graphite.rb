@@ -54,6 +54,7 @@ module Dalia
 		def self.send_udp(message)
 			socket = UDPSocket.new
 			socket.send(message, 0, opts[:statsd_host], opts[:statsd_port])
+			socket.close
 		end
 
 	end
