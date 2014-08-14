@@ -2,6 +2,10 @@
 
 Simple wrapper for Graphite and Statsd
 
+## Instructions
+
+Check the `test` folder for examples, if you need more explanations please contact us.
+
 ## Installation
 
 Add this line to your application's Gemfile:
