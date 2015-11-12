@@ -22,7 +22,17 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    Dalia::MiniGraphite.config({
+      :graphite_host => "my.graphite.server.com",
+      :graphite_port => 2003, # default 2003
+      :statsd_host => "my.graphite.server.com",
+      :statsd_port => 8125, # default 8125
+      :mock_mode => false, # default false
+      :debug_mode => true # default false
+    })
+
+    Dalia::MiniGraphite.datapoint("my.key", 120, Time.now) # to Graphite
+    Dalia::MiniGraphite.counter("my.key", 120) # to StatSD
 
 ## Contributing
 
