@@ -34,6 +34,23 @@ Or install it yourself as:
     Dalia::MiniGraphite.datapoint("my.key", 120, Time.now) # to Graphite
     Dalia::MiniGraphite.counter("my.key", 120) # to StatSD
 
+
+This will send 4 signals:
+
+- key_prefix.ini            # At the begining of the block
+- key_prefix.count          # At the begining of the block, keep it for compatibility
+- key_prefix.time, ~1000    # At the end of the block, with the Benchmark.realtime result of the execution
+- key_prefix.end            # At the end of the block
+
+    result =
+      Dalia::MiniGraphite.benchmark_wrapper("key_prefix") do
+        sleep(1)
+        "RESULT"
+      end
+
+    puts result # => RESULT
+
+
 ## Contributing
 
 1. Fork it ( http://github.com/<my-github-username>/mini_graphite/fork )

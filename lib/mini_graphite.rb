@@ -1,5 +1,6 @@
 require_relative "mini_graphite/version"
 require_relative "mini_graphite/logger"
+require "benchmark"
 
 require "socket"
 
@@ -33,6 +34,24 @@ module Dalia
       logger.debug("Sending counter: '#{signal}'")
 
       send_udp(signal) if !opts[:mock_mode]
+    end
+
+    def self.benchmark_wrapper(key)
+      counter("#{key}.ini")
+
+      result = nil
+
+      time =
+        Benchmark.realtime do
+          result = yield
+        end
+
+      counter("#{key}.count")
+      counter("#{key}.time", time * 1000)
+
+      counter("#{key}.end")
+
+      result
     end
 
   private
