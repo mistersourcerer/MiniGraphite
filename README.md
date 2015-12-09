@@ -42,13 +42,13 @@ This will send 4 signals:
 - key_prefix.time, ~1000    # At the end of the block, with the Benchmark.realtime result of the execution
 - key_prefix.end            # At the end of the block
 
-    result =
-      Dalia::MiniGraphite.benchmark_wrapper("key_prefix") do
-        sleep(1)
-        "RESULT"
-      end
+     result =
+       Dalia::MiniGraphite.benchmark_wrapper("key_prefix") do
+         sleep(1)
+         "RESULT"
+       end
 
-    puts result # => RESULT
+     puts result # => RESULT
 
 
 ## Contributing
