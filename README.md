@@ -22,6 +22,8 @@ Or install it yourself as:
 
 ## Usage
 
+### Config
+
     Dalia::MiniGraphite.config({
       :graphite_host => "my.graphite.server.com",
       :graphite_port => 2003, # default 2003
@@ -31,16 +33,12 @@ Or install it yourself as:
       :debug_mode => true # default false
     })
 
+### Simple signals
+
     Dalia::MiniGraphite.datapoint("my.key", 120, Time.now) # to Graphite
     Dalia::MiniGraphite.counter("my.key", 120) # to StatSD
 
-
-This will send 4 signals:
-
-- key_prefix.ini            # At the begining of the block
-- key_prefix.count          # At the begining of the block, keep it for compatibility
-- key_prefix.time, ~1000    # At the end of the block, with the Benchmark.realtime result of the execution
-- key_prefix.end            # At the end of the block
+### Block wrapper benchmark
 
      result =
        Dalia::MiniGraphite.benchmark_wrapper("key_prefix") do
@@ -49,6 +47,13 @@ This will send 4 signals:
        end
 
      puts result # => RESULT
+
+This will send 4 signals:
+
+- *key_prefix.ini*            # At the begining of the block
+- *key_prefix.count*          # At the begining of the block, keep it for compatibility
+- *key_prefix.time, ~1000*    # At the end of the block, with the Benchmark.realtime result of the execution
+- *key_prefix.end*            # At the end of the block
 
 
 ## Contributing
