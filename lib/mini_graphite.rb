@@ -1,5 +1,6 @@
 require_relative "mini_graphite/version"
 require_relative "mini_graphite/logger"
+require_relative "mini_graphite/routes_reporter"
 require "benchmark"
 
 require "socket"

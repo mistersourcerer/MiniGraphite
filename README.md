@@ -55,6 +55,29 @@ This will send 4 signals:
 - *key_prefix.time, ~1000*    # At the end of the block, with the Benchmark.realtime result of the execution
 - *key_prefix.end*            # At the end of the block
 
+### Routes reporter for Sinatra
+
+The rack middleware must be added to the Rack chain in config.ru passing along with it a block with  config options:
+
+- *set_graphite_key "graphite_key", /route_regexp/*   #  The regular expression will be used to match the Sinatra route and the corresponding graphite_key will be used to build the Graphite metrics:
+
+"[graphite_key].count"  # The counter of the times a particular route is requested.
+"[graphite_key].duration" # The duration in milliseconds of each request/response cycle.
+
+If the requested url doesn't match any configured regular expression the Graphite metrics will not be sent.
+
+Example:
+
+    # config.ru
+
+    use Dalia::MiniGraphite::RoutesReporter do
+      set_graphite_key "app.my_app.production.routes.active_surveys", /active_surveys\/this_should_be_a_password/
+      set_graphite_key "app.my_app.production.routes.get_surveys", /\:offer_click_id\/\:panel_user_id\/\:panel_user_id_kind/
+      set_graphite_key "app.my_app.production.routes.error", /error/
+      set_graphite_key "app.my_app.production.routes.homepage", /\/$/
+    end
+
+    run MyApp::App
 
 ## Contributing
 
