@@ -40,8 +40,9 @@ Or install it yourself as:
 
 ### Block wrapper benchmark
 
+     # Dalia::MiniGraphite.benchmark_wrapper(key_prefix, result_send_method)
      result =
-       Dalia::MiniGraphite.benchmark_wrapper("key_prefix", [send_result={true,false}]) do
+       Dalia::MiniGraphite.benchmark_wrapper("key_prefix", :length) do
          sleep(1)
          "RESULT"
        end
@@ -51,8 +52,8 @@ Or install it yourself as:
 This will send 4 signals:
 
 - *key_prefix.ini*            # At the begining of the block
-- *key_prefix.result*         # At the end of the block, send the block result. Only if `send_result` paramater is `true`.
-- *key_prefix.time, [ms]*     # At the end of the block, with the Benchmark.realtime result of the execution
+- *key_prefix.result, 6*      # At the end of the block, send the block `result.send(result_send_method)`. Only if `result_send_method` paramater is present.
+- *key_prefix.time, ~1000*    # At the end of the block, with the Benchmark.realtime result of the execution
 - *key_prefix.end*            # At the end of the block
 
 ### Routes reporter for Sinatra
