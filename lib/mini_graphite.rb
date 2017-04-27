@@ -30,7 +30,8 @@ module Dalia
       send_tcp(signal) if !opts[:mock_mode]
     end
 
-    def self.counter(key, value = 1)
+    def self.counter(key, value = nil)
+      value ||= 1
       signal = "#{key}:#{value}|c"
       logger.debug("Sending counter: '#{signal}'")
 
