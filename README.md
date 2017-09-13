@@ -64,8 +64,9 @@ The rack middleware must be added to the Rack chain in config.ru passing along w
 
 - *set_graphite_key "graphite_key", /route_regexp/*   #  The regular expression will be used to match the Sinatra route and the corresponding graphite_key will be used to build the Graphite metrics:
 
-"[graphite_key].count"  # The counter of the times a particular route is requested.
-"[graphite_key].duration" # The duration in milliseconds of each request/response cycle.
+- "[graphite\_key].count"           # The counter of the times a particular route is requested.
+- "[graphite\_key].duration"        # The duration in milliseconds of each request/response cycle.
+- "[graphite\_key].duration\_stats" # The duration in milliseconds of each request/response cycle in a "ms" metric
 
 If the requested url doesn't match any configured regular expression the Graphite metrics will not be sent.
 

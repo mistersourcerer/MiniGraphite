@@ -20,6 +20,7 @@ module Dalia
 
           Dalia::MiniGraphite.counter("#{graphite_key}.count") if graphite_key
           Dalia::MiniGraphite.counter("#{graphite_key}.duration", time_taken) if graphite_key
+          Dalia::MiniGraphite.time("#{graphite_key}.duration_stats", time_taken) if graphite_key
         end
 
         [status, headers, body]
