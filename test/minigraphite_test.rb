@@ -26,6 +26,17 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
     Dalia::MiniGraphite.counter("height", 231)
   end
 
+  def test_time
+    Dalia::MiniGraphite.config({ :statsd_host => "statsd.host.com", :statsd_port => 8125 })
+
+    socket_mock = mock()
+    UDPSocket.expects(:new).returns(socket_mock)
+    socket_mock.expects(:send).with("my_time:231|ms", 0, "statsd.host.com", 8125 )
+    socket_mock.expects(:close)
+
+    Dalia::MiniGraphite.time("my_time", 231)
+  end
+
   def test_counter_when_nil_value
     Dalia::MiniGraphite.config({ :statsd_host => "statsd.host.com", :statsd_port => 8125 })
 
@@ -76,6 +87,8 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
     Dalia::MiniGraphite.expects(:counter).with("key_prefix.result").never
     Dalia::MiniGraphite.expects(:counter).with("key_prefix.end")
 
+    Dalia::MiniGraphite.expects(:time).with("key_prefix.time_stats", is_a(Float))
+
     result =
       Dalia::MiniGraphite.benchmark_wrapper("key_prefix") do
         sleep(1)
@@ -90,6 +103,8 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
     Dalia::MiniGraphite.expects(:counter).with("key_prefix.time", is_a(Float))
     Dalia::MiniGraphite.expects(:counter).with("key_prefix.result", 6)
     Dalia::MiniGraphite.expects(:counter).with("key_prefix.end")
+
+    Dalia::MiniGraphite.expects(:time).with("key_prefix.time_stats", is_a(Float))
 
     result =
       Dalia::MiniGraphite.benchmark_wrapper("key_prefix", :length) do

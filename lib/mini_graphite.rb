@@ -38,6 +38,13 @@ module Dalia
       send_udp(signal) if !opts[:mock_mode]
     end
 
+    def self.time(key, value = 0)
+      signal = "#{key}:#{value}|ms"
+      logger.debug("Sending time: '#{signal}'")
+
+      send_udp(signal) if !opts[:mock_mode]
+    end
+
     def self.benchmark_wrapper(key, result_send_method = nil)
       counter("#{key}.ini")
 
@@ -51,6 +58,8 @@ module Dalia
       counter("#{key}.time", time * 1000)
       counter("#{key}.result", result.send(result_send_method)) if result_send_method
       counter("#{key}.end")
+
+      time("#{key}.time_stats", time * 1000)
 
       result
     end

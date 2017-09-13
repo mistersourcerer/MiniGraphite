@@ -2,7 +2,7 @@
 
 Simple wrapper for Graphite and Statsd
 
-## Instructions
+## Instructions
 
 Check the `test` folder for examples, if you need more explanations please contact us.
 
@@ -36,7 +36,8 @@ Or install it yourself as:
 ### Simple signals
 
     Dalia::MiniGraphite.datapoint("my.key", 120, Time.now) # to Graphite
-    Dalia::MiniGraphite.counter("my.key", 120) # to StatSD
+    Dalia::MiniGraphite.counter("my.key", 120) # to StatSD with `c` modifyer
+    Dalia::MiniGraphite.time("my.key", 120) # to StatSD with `ms` modifyer
 
 ### Block wrapper benchmark
 
@@ -49,12 +50,13 @@ Or install it yourself as:
 
      puts result # => RESULT
 
-This will send 4 signals:
+This will send several signals:
 
-- *key_prefix.ini*            # At the begining of the block
-- *key_prefix.result, 6*      # At the end of the block, send the block `result.send(result_send_method)`. Only if `result_send_method` paramater is present.
-- *key_prefix.time, ~1000*    # At the end of the block, with the Benchmark.realtime result of the execution
-- *key_prefix.end*            # At the end of the block
+- *key_prefix.ini:1|c*            # At the begining of the block
+- *key_prefix.result:6|c*         # At the end of the block, send the block `result.send(result_send_method)`. Only if `result_send_method` paramater is present.
+- *key_prefix.time:1000|c*        # At the end of the block, with the Benchmark.realtime result of the execution
+- *key_prefix.end:1|c*            # At the end of the block
+- *key_prefix.time_stats:1000|ms* # At the end of the block, with the Benchmark.realtime result of the execution
 
 ### Routes reporter for Sinatra
 
