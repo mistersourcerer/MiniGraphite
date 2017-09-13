@@ -64,6 +64,34 @@ module Dalia
       result
     end
 
+    def self.send_tcp(message)
+      hosts = [opts[:graphite_host]].flatten
+
+      hosts.each do |host|
+        send_tcp_on_host(host, opts[:graphite_port], message)
+      end
+    end
+
+    def self.send_udp(message)
+      hosts = [opts[:statsd_host]].flatten
+
+      hosts.each do |host|
+        send_udp_on_host(host, opts[:statsd_port], message)
+      end
+    end
+
+    def self.send_tcp_on_host(host, port, message)
+      socket = TCPSocket.new(host, port)
+      socket.print("#{message}\n")
+      socket.close
+    end
+
+    def self.send_udp_on_host(host, port, message)
+      socket = UDPSocket.new
+      socket.send(message, 0, host, port)
+      socket.close
+    end
+
   private
 
     def self.opts
@@ -73,18 +101,5 @@ module Dalia
     def self.logger
       @logger
     end
-
-    def self.send_tcp(message)
-      socket = TCPSocket.new(opts[:graphite_host], opts[:graphite_port])
-      socket.print("#{message}\n")
-      socket.close
-    end
-
-    def self.send_udp(message)
-      socket = UDPSocket.new
-      socket.send(message, 0, opts[:statsd_host], opts[:statsd_port])
-      socket.close
-    end
-
   end
 end

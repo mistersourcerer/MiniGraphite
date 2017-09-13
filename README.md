@@ -27,7 +27,18 @@ Or install it yourself as:
     Dalia::MiniGraphite.config({
       :graphite_host => "my.graphite.server.com",
       :graphite_port => 2003, # default 2003
-      :statsd_host => "my.graphite.server.com",
+      :statsd_host => "my.statsd.server.com",
+      :statsd_port => 8125, # default 8125
+      :mock_mode => false, # default false
+      :debug_mode => true # default false
+    })
+
+Also support multiple servers:
+
+    Dalia::MiniGraphite.config({
+      :graphite_host => ["my.graphite1.server.com", "my.graphite2.server.com"],
+      :graphite_port => 2003, # default 2003
+      :statsd_host => ["my.statsd1.server.com", "my.statsd2.server.com", "my.statsd3.server.com"],
       :statsd_port => 8125, # default 8125
       :mock_mode => false, # default false
       :debug_mode => true # default false

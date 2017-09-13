@@ -2,7 +2,7 @@ require "minitest/autorun"
 require "mocha/setup"
 require_relative "../lib/mini_graphite"
 
-class MiniGraphiteTest < MiniTest::Unit::TestCase
+class MiniGraphiteTest < MiniTest::Test
 
   def test_debug
     Kernel.expects(:puts).with(regexp_matches(/MESSAGE/))

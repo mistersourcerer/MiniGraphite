@@ -2,49 +2,77 @@ require "minitest/autorun"
 require "mocha/setup"
 require_relative "../lib/mini_graphite"
 
-class MiniGraphiteTest < MiniTest::Unit::TestCase
+class MiniGraphiteTest < MiniTest::Test
+
+  def test_send_tcp_on_host
+    socket_mock = mock()
+    TCPSocket.expects(:new).with("HOST", "PORT").returns(socket_mock)
+    socket_mock.expects(:print).with("MESSAGE\n")
+    socket_mock.expects(:close)
+
+    Dalia::MiniGraphite.send_tcp_on_host("HOST", "PORT", "MESSAGE")
+  end
+
+  def test_send_udp_on_host
+    socket_mock = mock()
+    UDPSocket.expects(:new).returns(socket_mock)
+    socket_mock.expects(:send).with("MESSAGE", 0, "HOST", "PORT" )
+    socket_mock.expects(:close)
+
+    Dalia::MiniGraphite.send_udp_on_host("HOST", "PORT", "MESSAGE")
+  end
+
+  def test_send_tcp
+    Dalia::MiniGraphite.config({ :graphite_host => "HOST", :graphite_port => "PORT" })
+    Dalia::MiniGraphite.expects(:send_tcp_on_host).with("HOST", "PORT", "MESSAGE")
+    Dalia::MiniGraphite.send_tcp("MESSAGE")
+  end
+
+  def test_send_tcp_when_multiple_hosts
+    Dalia::MiniGraphite.config({ :graphite_host => ["HOST1", "HOST2"], :graphite_port => "PORT" })
+
+    Dalia::MiniGraphite.expects(:send_tcp_on_host).with("HOST1", "PORT", "MESSAGE")
+    Dalia::MiniGraphite.expects(:send_tcp_on_host).with("HOST2", "PORT", "MESSAGE")
+
+    Dalia::MiniGraphite.send_tcp("MESSAGE")
+  end
+
+  def test_send_udp
+    Dalia::MiniGraphite.config({ :statsd_host => "HOST", :statsd_port => "PORT" })
+    Dalia::MiniGraphite.expects(:send_udp_on_host).with("HOST", "PORT", "MESSAGE")
+    Dalia::MiniGraphite.send_udp("MESSAGE")
+  end
+
+  def test_send_udp_when_multiple_hosts
+    Dalia::MiniGraphite.config({ :statsd_host => ["HOST1", "HOST2"], :statsd_port => "PORT" })
+
+    Dalia::MiniGraphite.expects(:send_udp_on_host).with("HOST1", "PORT", "MESSAGE")
+    Dalia::MiniGraphite.expects(:send_udp_on_host).with("HOST2", "PORT", "MESSAGE")
+
+    Dalia::MiniGraphite.send_udp("MESSAGE")
+  end
 
   def test_datapoint
     Dalia::MiniGraphite.config({ :graphite_host => "graphite.host.com", :graphite_port => 2003 })
-
-    socket_mock = mock()
-    TCPSocket.expects(:new).with("graphite.host.com", 2003).returns(socket_mock)
-    socket_mock.expects(:print).with("test.age 31 1357117860\n")
-    socket_mock.expects(:close)
-
+    Dalia::MiniGraphite.expects(:send_tcp).with("test.age 31 1357117860")
     Dalia::MiniGraphite.datapoint("test.age", 31, Time.new(2013,1,2,10,11))
   end
 
   def test_counter
     Dalia::MiniGraphite.config({ :statsd_host => "statsd.host.com", :statsd_port => 8125 })
-
-    socket_mock = mock()
-    UDPSocket.expects(:new).returns(socket_mock)
-    socket_mock.expects(:send).with("height:231|c", 0, "statsd.host.com", 8125 )
-    socket_mock.expects(:close)
-
+    Dalia::MiniGraphite.expects(:send_udp).with("height:231|c")
     Dalia::MiniGraphite.counter("height", 231)
   end
 
   def test_time
     Dalia::MiniGraphite.config({ :statsd_host => "statsd.host.com", :statsd_port => 8125 })
-
-    socket_mock = mock()
-    UDPSocket.expects(:new).returns(socket_mock)
-    socket_mock.expects(:send).with("my_time:231|ms", 0, "statsd.host.com", 8125 )
-    socket_mock.expects(:close)
-
+    Dalia::MiniGraphite.expects(:send_udp).with("my_time:231|ms")
     Dalia::MiniGraphite.time("my_time", 231)
   end
 
   def test_counter_when_nil_value
     Dalia::MiniGraphite.config({ :statsd_host => "statsd.host.com", :statsd_port => 8125 })
-
-    socket_mock = mock()
-    UDPSocket.expects(:new).returns(socket_mock)
-    socket_mock.expects(:send).with("height:1|c", 0, "statsd.host.com", 8125 )
-    socket_mock.expects(:close)
-
+    Dalia::MiniGraphite.expects(:send_udp).with("height:1|c")
     Dalia::MiniGraphite.counter("height", nil)
   end
 
@@ -71,13 +99,13 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
 
   def test_on_datapoint_not_send_tcp_if_mock_mode
     Dalia::MiniGraphite.config(:mock_mode => true)
-    TCPSocket.expects(:new).never
+    Dalia::MiniGraphite.expects(:send_tcp).never
     Dalia::MiniGraphite.datapoint("test.age")
   end
 
   def test_on_counter_not_send_udp_if_mock_mode
     Dalia::MiniGraphite.config(:mock_mode => true)
-    UDPSocket.expects(:new).never
+    Dalia::MiniGraphite.expects(:send_udp).never
     Dalia::MiniGraphite.counter("test.age")
   end
 
