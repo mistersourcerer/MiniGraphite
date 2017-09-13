@@ -17,10 +17,9 @@ class MiniGraphiteTest < MiniTest::Unit::TestCase
   end
 
   def test_debug_when_rails_actived
-    Kernel.const_set("Rails", mock(:logger => mock(:info)))
+    Rails.expects(:logger => mock(:info))
     logger = Dalia::MiniGraphite::Logger.new
     logger.debug("MESSAGE")
-    Kernel.send(:remove_const, :Rails)
   end
 
 end

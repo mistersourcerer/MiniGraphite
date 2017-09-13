@@ -14,7 +14,7 @@ module Dalia
 
         result = "Dalia::MiniGraphite [#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}]: #{message}"
 
-        if defined? ::Rails
+        if defined? ::Rails.logger
           ::Rails.logger.info result
         else
           Kernel.puts result

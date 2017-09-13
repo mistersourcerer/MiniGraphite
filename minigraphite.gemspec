@@ -6,8 +6,8 @@ require 'mini_graphite/version'
 Gem::Specification.new do |spec|
   spec.name          = "mini_graphite"
   spec.version       = Dalia::MiniGraphite::VERSION
-  spec.authors       = ["Sevastianos Komianos"]
-  spec.email         = ["sebastian.komianos@daliaresearch.com"]
+  spec.authors       = ["Sevastianos Komianos", "Fernando Guillen"]
+  spec.email         = ["it@daliaresearch.com"]
   spec.summary       = "Simple wrapper for Graphite and Statsd"
   spec.description   = "Simple wrapper for Graphite and Statsd"
   spec.homepage      = "https://github.com/DaliaResearch/MiniGraphite"
