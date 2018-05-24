@@ -94,7 +94,7 @@ class MiniGraphiteTest < MiniTest::Test
     Dalia::MiniGraphite.config()
 
     Dalia::MiniGraphite::Logger.any_instance.expects(:debug).with("Sending datapoint: 'test.age 31 1357117860'")
-    Dalia::MiniGraphite.datapoint("test.age", 31, Time.new(2013,1,2,10,11))
+    Dalia::MiniGraphite.datapoint("test.age", 31, Time.local(2013,1,2,10,11))
   end
 
   def test_on_datapoint_not_send_tcp_if_mock_mode
